@@ -260,7 +260,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         String jsonValue = null;
         JSONObject o = new JSONObject();
         try {
-            o.put(ENABLE_WATER_MARK_STRING, "hello world");
+            o.put(ENABLE_WATER_MARK_STRING, "hello world!!");
             o.put(ENABLE_WATER_MARK_FLAG, true);
             jsonValue = o.toString();
         } catch (JSONException e) {

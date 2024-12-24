@@ -22,8 +22,7 @@
 
             <FrameLayout
                 android:id="@+id/fl_local"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
             <FrameLayout
