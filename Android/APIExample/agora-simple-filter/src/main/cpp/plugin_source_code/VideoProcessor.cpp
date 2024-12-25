@@ -52,6 +52,10 @@ namespace agora {
         }
 
         int WatermarkProcessor::processFrame(agora::rtc::VideoFrameData &capturedFrame) {
+            if (!targetRawDataOutput) {
+                targetRawDataOutput = gpupixel::TargetRawDataOutput::create();
+                sourceRawDataInput->addTarget(targetRawDataOutput);
+            }
             int width = capturedFrame.width;
             int height = capturedFrame.height;
             int ySize = width * height;
@@ -61,6 +65,7 @@ namespace agora {
             uint8_t* uPlane = capturedFrame.pixels.data + ySize;
             uint8_t* vPlane = capturedFrame.pixels.data + ySize + uvSize;
 
+            targetRawDataOutput->setOutputYuvFrameBuffer(capturedFrame.pixels.data);
             sourceRawDataInput->uploadBytes(width, height, yPlane, ySize, uPlane, ySize,
                                                    vPlane, ySize, capturedFrame.timestamp_ms);
             //readYUVData(capturedFrame.pixels.data, width, height);

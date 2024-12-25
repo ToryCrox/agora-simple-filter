@@ -62,6 +62,8 @@ namespace agora {
             std::shared_ptr<gpupixel::LipstickFilter> lipstickFilter;
             std::shared_ptr<gpupixel::SourceRawDataInput> sourceRawDataInput;
 
+            std::shared_ptr<gpupixel::TargetRawDataOutput> targetRawDataOutput;
+
             void ensureBeautyFaceFilter();
             void ensureFaceReshapeFilter();
             void ensureLipstickFilter();

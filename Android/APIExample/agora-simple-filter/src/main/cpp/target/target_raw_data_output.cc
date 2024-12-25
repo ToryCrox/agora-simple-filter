@@ -10,6 +10,8 @@
 #include "gpupixel_context.h"
 #include <cstring>
 #include "libyuv.h"
+#include "logutils.h"
+
 USING_NS_GPUPIXEL
 
 const std::string kRGBToI420VertexShaderString = R"(
@@ -180,6 +182,12 @@ void TargetRawDataOutput::setPixelsCallbck(RawOutputCallback cb) {
   pixels_callback_ = cb;
 }
 
+
+void TargetRawDataOutput::setOutputYuvFrameBuffer(uint8_t* buffer) {
+
+  _outputYuvFrameBuffer = buffer;
+}
+
 void TargetRawDataOutput::initOutputBuffer(int width, int height) {
   uint32_t rgb_size = width * height * 4;
   uint32_t yuv_size = width * height * 3 / 2;
@@ -190,12 +198,17 @@ void TargetRawDataOutput::initOutputBuffer(int width, int height) {
   }
   _readPixelData = new uint8_t[rgb_size];
   std::memset(_readPixelData, 0, rgb_size);
-  // alloc yuv frame buffer
-  if (_yuvFrameBuffer != nullptr) {
-    delete[] _yuvFrameBuffer;
-  }
-  _yuvFrameBuffer = new uint8_t[yuv_size];
-  std::memset(_yuvFrameBuffer, 0, yuv_size);
+
+    // alloc yuv frame buffer
+    if (_outputYuvFrameBuffer != nullptr) {
+        _yuvFrameBuffer = _outputYuvFrameBuffer;
+    } else {
+        if (_yuvFrameBuffer != nullptr) {
+            delete[] _yuvFrameBuffer;
+        }
+        _yuvFrameBuffer = new uint8_t[yuv_size];
+        std::memset(_yuvFrameBuffer, 0, yuv_size);
+    }
 }
 
 #if defined(GPUPIXEL_IOS)
@@ -327,6 +340,7 @@ void TargetRawDataOutput::readPixelsWithPBO(int width, int height) {
                   GL_PIXEL_PACK_BUFFER, 0, width * height * 4, GL_MAP_READ_BIT);
 #endif
   if (ptr) {
+
        libyuv::ABGRToI420(ptr, width * 4, _yuvFrameBuffer, _width,
                           _yuvFrameBuffer + _width * _height, _width / 2,
                           _yuvFrameBuffer + _width * _height * 5 / 4, _width

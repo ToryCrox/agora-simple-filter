@@ -34,6 +34,7 @@ class GPUPIXEL_API TargetRawDataOutput : public Target {
   void update(int64_t frameTime) override;
   void setI420Callbck(RawOutputCallback cb);
   void setPixelsCallbck(RawOutputCallback cb);
+  void setOutputYuvFrameBuffer(uint8_t* buffer);
  private:
   int renderToOutput();
   bool initWithShaderString(const std::string& vertexShaderSource,
@@ -79,6 +80,7 @@ class GPUPIXEL_API TargetRawDataOutput : public Target {
   // rgb buffer
   uint8_t* _readPixelData = nullptr;
   uint8_t* _yuvFrameBuffer = nullptr;
+  uint8_t* _outputYuvFrameBuffer = nullptr;
   // callback
   RawOutputCallback i420_callback_ = nullptr;
   RawOutputCallback pixels_callback_ = nullptr;
