@@ -30,4 +30,10 @@ public class ExtensionManager {
             e.printStackTrace();
         }
     }
+
+    public static String getResourcePath(Context context) {
+        String path = "resource";
+        File dstFile = context.getExternalFilesDir("assets");
+        return dstFile.getAbsolutePath() + File.separator + path;
+    }
 }

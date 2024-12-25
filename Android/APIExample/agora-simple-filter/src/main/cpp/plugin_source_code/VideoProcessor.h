@@ -17,6 +17,7 @@
 
 #include "EGLCore.h"
 #include "rapidjson/rapidjson.h"
+#include "gpupixel.h"
 
 namespace agora {
     namespace extension {
@@ -32,7 +33,7 @@ namespace agora {
 
             int processFrame(agora::rtc::VideoFrameData &capturedFrame);
 
-            int setParameters(std::string parameter);
+            int setProperty(std::string property, std::string parameter);
 
             std::thread::id getThreadId();
 
@@ -55,6 +56,16 @@ namespace agora {
             agora::agora_refptr<rtc::IExtensionVideoFilter::Control> control_;
             bool wmEffectEnabled_ = false;
             std::string wmStr_= "agora";
+
+            std::shared_ptr<gpupixel::BeautyFaceFilter> beautyFaceFilter;
+            std::shared_ptr<gpupixel::FaceReshapeFilter> faceReshapeFilter;
+            std::shared_ptr<gpupixel::LipstickFilter> lipstickFilter;
+            std::shared_ptr<gpupixel::SourceRawDataInput> sourceRawDataInput;
+
+            void ensureBeautyFaceFilter();
+            void ensureFaceReshapeFilter();
+            void ensureLipstickFilter();
+            void readYUVData(uint8_t* yuvData, int width, int height);
         };
     }
 }

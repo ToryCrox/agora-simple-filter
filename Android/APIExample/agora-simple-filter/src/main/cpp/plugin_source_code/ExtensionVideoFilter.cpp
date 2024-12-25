@@ -5,6 +5,9 @@
 #include "ExtensionVideoFilter.h"
 #include "../logutils.h"
 #include <sstream>
+#include "beauty_face_filter.h"
+#include "util.h"
+#include "error_code.h"
 
 namespace agora {
     namespace extension {
@@ -106,8 +109,12 @@ namespace agora {
         int ExtensionVideoFilter::setProperty(const char *key, const void *buf,
                                                  size_t buf_size) {
             PRINTF_INFO("setProperty  %s  %s", key, buf);
+            std::string propertyName((char*)key);
             std::string stringParameter((char*)buf);
-            waterMarkProcessor_->setParameters(stringParameter);
+            int result = waterMarkProcessor_->setProperty(propertyName, stringParameter);
+            if (result == -ERROR_INVALID_JSON) {
+                PRINTF_INFO("setProperty error!!!  %s  %s", key, buf);
+            }
             return 0;
         }
 

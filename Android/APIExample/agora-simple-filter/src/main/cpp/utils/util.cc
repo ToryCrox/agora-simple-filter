@@ -62,15 +62,16 @@ NS_GPUPIXEL_BEGIN
 std::string Util::resourceRoot = "";
 
 std::string Util::getResourcePath(std::string name) {
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  NSString* oc_path = [ObjcHelper
-      getResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
-  std::string path = [oc_path UTF8String];
-#elif defined(GPUPIXEL_ANDROID)
-  std::string path = getResourcePathJni(name);
-#else
-    std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
-#endif
+//#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
+//  NSString* oc_path = [ObjcHelper
+//      getResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
+//  std::string path = [oc_path UTF8String];
+//#elif defined(GPUPIXEL_ANDROID)
+//  std::string path = getResourcePathJni(name);
+//#else
+//    std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
+//#endif
+  std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
   return path;
 }
 

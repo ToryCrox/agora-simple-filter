@@ -31,6 +31,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
+import io.agora.extension.ExtensionManager;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.ExtensionContext;
@@ -94,6 +95,13 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     private boolean joined = false;
     private SeekBar record;
 
+    private SeekBar smoothSeekbar;
+    private SeekBar whitenessSeekbar;
+    private SeekBar thinfaceSeekbar;
+    private SeekBar bigeyeSeekbar;
+    private SeekBar lipstickSeekbar;
+
+
 
     /**
      * The Seek bar change listener.
@@ -133,14 +141,93 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        join = view.findViewById(R.id.btn_join);
-        et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        record = view.findViewById(R.id.recordingVol);
-        record.setOnSeekBarChangeListener(seekBarChangeListener);
-        record.setEnabled(false);
+        //join = view.findViewById(R.id.btn_join);
+        //et_channel = view.findViewById(R.id.et_channel);
+        //view.findViewById(R.id.btn_join).setOnClickListener(this);
+//        record = view.findViewById(R.id.recordingVol);
+//        record.setOnSeekBarChangeListener(seekBarChangeListener);
+//        record.setEnabled(false);
         local_view = view.findViewById(R.id.fl_local);
         remote_view = view.findViewById(R.id.fl_remote);
+        smoothSeekbar = view.findViewById(R.id.smooth_seekbar);
+        smoothSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                setProperty("BeautyFaceFilter", "skin_smoothing", i / 100f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        whitenessSeekbar = view.findViewById(R.id.whiteness_seekbar);
+        whitenessSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                setProperty("BeautyFaceFilter", "whiteness", i / 100f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        thinfaceSeekbar = view.findViewById(R.id.thinface_seekbar);
+        thinfaceSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                setProperty("FaceReshapeFilter", "thin_face", i / 100f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        bigeyeSeekbar = view.findViewById(R.id.bigeye_seekbar);
+        bigeyeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                setProperty("FaceReshapeFilter", "big_eye", i / 100f);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        lipstickSeekbar = view.findViewById(R.id.lipstick_seekbar);
+        lipstickSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                setProperty("LipstickFilter", "blend_level", i / 100f);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
     }
 
     @Override
@@ -162,6 +249,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
                     .show();
             return;
         }
+        ExtensionManager.copyResource(context);
         try {
             RtcEngineConfig config = new RtcEngineConfig();
             /*
@@ -221,7 +309,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
              * - 0: Success.
              * - < 0: Failure.
              */
-            engine.enableExtension(EXTENSION_VENDOR_NAME, EXTENSION_AUDIO_FILTER_VOLUME, true);
+            //engine.enableExtension(EXTENSION_VENDOR_NAME, EXTENSION_AUDIO_FILTER_VOLUME, true);
             // enable video filter before enable video
             engine.enableExtension(EXTENSION_VENDOR_NAME, EXTENSION_VIDEO_FILTER_WATERMARK, true);
             setWaterMarkProperty();
@@ -244,6 +332,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         }
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -256,18 +345,37 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     }
 
     private void setWaterMarkProperty() {
-
         String jsonValue = null;
         JSONObject o = new JSONObject();
         try {
-            o.put(ENABLE_WATER_MARK_STRING, "hello world!!");
-            o.put(ENABLE_WATER_MARK_FLAG, true);
+            o.put("rootPath", ExtensionManager.getResourcePath(getContext()));
             jsonValue = o.toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (jsonValue != null) {
-            engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_VIDEO_FILTER_WATERMARK, KEY_ENABLE_WATER_MARK, jsonValue);
+            engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_VIDEO_FILTER_WATERMARK, "setResourceRoot", jsonValue);
+        }
+
+        setProperty("BeautyFaceFilter", "skin_smoothing", 0.5f);
+        setProperty("BeautyFaceFilter", "whiteness", 0.5f);
+        setProperty("FaceReshapeFilter", "thin_face", 0.5f);
+        setProperty("FaceReshapeFilter", "big_eye", 0.5f);
+        setProperty("LipstickFilter", "blend_level", 0.5f);
+    }
+
+    private void setProperty(String filterName, String methodName, Object methodValue) {
+        String jsonValue = null;
+        JSONObject o = new JSONObject();
+        try {
+            o.put("methodName", methodName);
+            o.put("methodValue", methodValue);
+            jsonValue = o.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (jsonValue != null) {
+            engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_VIDEO_FILTER_WATERMARK, filterName, jsonValue);
         }
     }
 
