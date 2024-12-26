@@ -170,7 +170,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         whitenessSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                setProperty("BeautyFaceFilter", "whiteness", i / 100f);
+                setProperty("BeautyFaceFilter", "whiteness", i / 10f);
             }
 
             @Override
@@ -187,7 +187,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         thinfaceSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                setProperty("FaceReshapeFilter", "thin_face", i / 100f);
+                setProperty("FaceReshapeFilter", "thin_face", i / 10f);
             }
 
             @Override
@@ -204,7 +204,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         bigeyeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                setProperty("FaceReshapeFilter", "big_eye", i / 100f);
+                setProperty("FaceReshapeFilter", "big_eye", i / 10f);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -218,7 +218,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         lipstickSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                setProperty("LipstickFilter", "blend_level", i / 100f);
+                setProperty("LipstickFilter", "blend_level", i / 10f);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {

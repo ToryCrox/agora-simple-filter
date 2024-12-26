@@ -29,13 +29,6 @@ namespace agora {
         using namespace rapidjson;
         bool WatermarkProcessor::initOpenGL() {
             sourceRawDataInput = gpupixel::SourceRawDataInput::create();
-            sourceRawDataInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
-                PRINTF_INFO("RegLandmarkCallback  %zu", landmarks.size());
-                ensureFaceReshapeFilter();
-                ensureLipstickFilter();
-                faceReshapeFilter->setProperty("face_landmark", landmarks);
-                lipstickFilter->setProperty("face_landmark", landmarks);
-            });
             return true;
         }
 
@@ -144,6 +137,20 @@ namespace agora {
             }
         }
 
+        void WatermarkProcessor::initLandmarkCallback() {
+            if (isLandmarkCallbackInit) {
+                return;
+            }
+            isLandmarkCallbackInit = true;
+            sourceRawDataInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
+                PRINTF_INFO("RegLandmarkCallback  %zu", landmarks.size());
+                ensureFaceReshapeFilter();
+                ensureLipstickFilter();
+                faceReshapeFilter->setProperty("face_landmark", landmarks);
+                lipstickFilter->setProperty("face_landmark", landmarks);
+            });
+        }
+
         int WatermarkProcessor::setProperty(std::string property, std::string parameter) {
             Document d;
             d.Parse(parameter.c_str());
@@ -159,6 +166,7 @@ namespace agora {
                     return -ERROR_INVALID_JSON;
                 }
                 gpupixel::Util::setResourceRoot(rootPathValue.GetString());
+                initLandmarkCallback();
                 return 0;
             }
 

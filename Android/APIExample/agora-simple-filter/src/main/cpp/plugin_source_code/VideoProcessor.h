@@ -67,6 +67,8 @@ namespace agora {
             void ensureBeautyFaceFilter();
             void ensureFaceReshapeFilter();
             void ensureLipstickFilter();
+            bool isLandmarkCallbackInit = false;
+            void initLandmarkCallback();
             void readYUVData(uint8_t* yuvData, int width, int height);
         };
     }
