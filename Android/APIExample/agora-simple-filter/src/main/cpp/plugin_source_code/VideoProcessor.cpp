@@ -59,8 +59,8 @@ namespace agora {
             uint8_t* vPlane = capturedFrame.pixels.data + ySize + uvSize;
 
             targetRawDataOutput->setOutputYuvFrameBuffer(capturedFrame.pixels.data);
-            sourceRawDataInput->uploadBytes(width, height, yPlane, ySize, uPlane, ySize,
-                                                   vPlane, ySize, capturedFrame.timestamp_ms);
+            sourceRawDataInput->uploadBytes(width, height, yPlane, ySize, uPlane, uvSize,
+                                                   vPlane, uvSize, capturedFrame.timestamp_ms);
             //readYUVData(capturedFrame.pixels.data, width, height);
             return 0;
         }
