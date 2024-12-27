@@ -44,7 +44,7 @@ namespace agora {
             return false;
         }
 
-        int WatermarkProcessor::processFrame(agora::rtc::VideoFrameData &capturedFrame) {
+        int WatermarkProcessor::processFrame(agora::rtc::VideoFrameDataV2 &capturedFrame) {
             if (!targetRawDataOutput) {
                 targetRawDataOutput = gpupixel::TargetRawDataOutput::create();
                 sourceRawDataInput->addTarget(targetRawDataOutput);
@@ -58,9 +58,12 @@ namespace agora {
             uint8_t* uPlane = capturedFrame.pixels.data + ySize;
             uint8_t* vPlane = capturedFrame.pixels.data + ySize + uvSize;
 
+            int stride = ceil(width / 64) * 64;
+            PRINTF_INFO("processFrame stride: %d", stride);
+
             targetRawDataOutput->setOutputYuvFrameBuffer(capturedFrame.pixels.data);
-            sourceRawDataInput->uploadBytes(width, height, yPlane, ySize, uPlane, uvSize,
-                                                   vPlane, uvSize, capturedFrame.timestamp_ms);
+            sourceRawDataInput->uploadBytes(width, height, yPlane, stride, uPlane, stride,
+                                                   vPlane, stride, capturedFrame.timestamp_ms);
             //readYUVData(capturedFrame.pixels.data, width, height);
             return 0;
         }

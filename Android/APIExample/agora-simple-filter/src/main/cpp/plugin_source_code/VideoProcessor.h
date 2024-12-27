@@ -31,7 +31,7 @@ namespace agora {
 
             bool detachCurrent();
 
-            int processFrame(agora::rtc::VideoFrameData &capturedFrame);
+            int processFrame(agora::rtc::VideoFrameDataV2 &capturedFrame);
 
             int setProperty(std::string property, std::string parameter);
 

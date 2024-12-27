@@ -76,7 +76,7 @@ namespace agora {
             bool isAsyncMode = (mode_ == ProcessMode::kAsync);
             if (isAsyncMode && waterMarkProcessor_ && control_ && invoker_id >= 0) {
                 threadPool_.PostTask(invoker_id, [videoFrame=frame, waterMarkProcessor=waterMarkProcessor_, control=control_] {
-                    rtc::VideoFrameData srcData;
+                    rtc::VideoFrameDataV2 srcData;
                     videoFrame->getVideoFrameData(srcData);
                     waterMarkProcessor->processFrame(srcData);
                     // In asynchronous mode (mode is set to Async),
@@ -95,7 +95,7 @@ namespace agora {
             }
             bool isSyncMode = (mode_ == ProcessMode::kSync);
             if (isSyncMode && waterMarkProcessor_) {
-                rtc::VideoFrameData srcData;
+                rtc::VideoFrameDataV2 srcData;
                 src->getVideoFrameData(srcData);
                 waterMarkProcessor_->processFrame(srcData);
                 dst = src;

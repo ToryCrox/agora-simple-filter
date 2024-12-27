@@ -1,4 +1,4 @@
-*.so
+#*.so
 *.iml
 .gradle
 /local.properties
